@@ -16,3 +16,4 @@ table. Your result set should include all of the distributors, whether or not th
 6. How many movies in the dataset are distributed by a company which is not headquartered in California? Which of these movies has the highest imdb rating?
 
 7. Which have a higher average rating, movies which are over two hours long or movies which are under two hours?
+	- https://www.w3schools.com/sql/sql_case.asp 
