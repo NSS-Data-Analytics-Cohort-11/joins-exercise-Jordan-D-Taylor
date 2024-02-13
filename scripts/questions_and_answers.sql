@@ -74,8 +74,14 @@ HAVING distributors.headquarters NOT LIKE('%CA%')
 
 -- 7. Which have a higher average rating, movies which are over two hours long or movies which are under two hours?
 
-SELECT AVG(rating.imdb_rating) AS avg_rating, specs.length_in_minutes
-FROM rating
-INNER JOIN specs
-	ON rating.movie_id = specs.movie_id
-GROUP BY specs.length_in_minutes
+SELECT ROUND(AVG(rating.imdb_rating), 2) AS avg_rating,
+CASE WHEN length_in_min > 120 THEN '>2 Hours'
+	ELSE '< 120'
+END AS lengthtext
+FROM specs
+INNER JOIN rating
+ON specs.movie_id = rating.movie_id
+GROUP BY lengthtext
+ORDER BY avg_rating DESC;
+
+-- Answer: Movies that are over 2 hours long
