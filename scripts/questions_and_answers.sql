@@ -42,7 +42,8 @@ SELECT distributors.company_name, COUNT(specs.film_title) AS film_count
 FROM distributors
 LEFT JOIN specs
 	ON distributors.distributor_id = specs.domestic_distributor_id
-GROUP BY distributors.company_name;
+GROUP BY distributors.company_name
+ORDER BY film_count;
 
 -- Answer: see query
 
@@ -63,25 +64,27 @@ LIMIT 5;
 
 -- 6. How many movies in the dataset are distributed by a company which is not headquartered in California? Which of these movies has the highest imdb rating?
 
-SELECT COUNT(specs.*) AS film_count, distributors.headquarters
+SELECT rating.imdb_rating, distributors.headquarters, specs.film_title
 FROM specs
 INNER JOIN distributors
 	ON distributors.distributor_id = specs.domestic_distributor_id
-GROUP BY distributors.headquarters
+INNER JOIN rating
+	ON specs.movie_id = rating.movie_id
+GROUP BY distributors.headquarters, specs.film_title, rating.imdb_rating
 HAVING distributors.headquarters NOT LIKE('%CA%')
 
--- Answer: 2
+-- Answer: Dirty Dancing
 
 -- 7. Which have a higher average rating, movies which are over two hours long or movies which are under two hours?
 
 SELECT ROUND(AVG(rating.imdb_rating), 2) AS avg_rating,
 CASE WHEN length_in_min > 120 THEN '>2 Hours'
 	ELSE '< 120'
-END AS lengthtext
+END AS film_length
 FROM specs
 INNER JOIN rating
 ON specs.movie_id = rating.movie_id
-GROUP BY lengthtext
+GROUP BY film_length
 ORDER BY avg_rating DESC;
 
 -- Answer: Movies that are over 2 hours long
